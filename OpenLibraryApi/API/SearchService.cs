@@ -1,19 +1,25 @@
-using Microsoft.Extensions.Configuration;
-using OpenLibraryApi.Configuration;
+using System.Net;
+using System.Net.Http.Json;
+using System.Text.Json;
+using OpenLibraryApi.Models;
+
+namespace OpenLibraryApi.API;
 
 public class SearchService : ISearchService
 {
-    private readonly ApiConfiguration configuration;
+    private readonly HttpClient httpClient;
 
-    public SearchService(ApiConfiguration configuration)
-    {
-        this.configuration = configuration;
-    }
+    public SearchService(HttpClient _httpClient) => httpClient = _httpClient;
     
-    public Task Search(string searchTerm)
+    public async Task<SearchResponse> GeneralSearch(string searchTerm)
     {
-        Console.WriteLine($"search api config setting {this.configuration.SearchApi}");
-        Console.WriteLine($"Searching Open API for {searchTerm}");
-        return Task.CompletedTask;
+        Console.WriteLine($"making call to {this.httpClient.BaseAddress} with search term {searchTerm}");
+        SearchResponse? response = await
+            httpClient.GetFromJsonAsync<SearchResponse>(
+                $"search.json?q={searchTerm.Replace(' ', '+')}",
+                new JsonSerializerOptions(JsonSerializerDefaults.General)
+            )
+            ?? throw new WebException("Did not receive a proper message from open-library");
+        return response;
     }
 }

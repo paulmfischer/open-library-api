@@ -1,9 +1,16 @@
 using Microsoft.Extensions.DependencyInjection;
+using OpenLibraryApi.API;
+
+namespace OpenLibraryApi.Configuration;
 
 public static class StartupExtensions
 {
-    public static void UseOpenLibraryApi(this IServiceCollection services)
+    public static void UseOpenLibraryApi(this IServiceCollection services, ApiConfiguration configuration)
     {
-        services.AddScoped<ISearchService, SearchService>();
+        services.AddHttpClient<ISearchService, SearchService>(
+            client => {
+                client.BaseAddress = new Uri(configuration.SearchApi);
+            }
+        );
     }
 }

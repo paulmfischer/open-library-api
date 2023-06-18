@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using OpenLibraryApi.API;
 using OpenLibraryApi.Configuration;
 
 IConfiguration config = new ConfigurationBuilder()
@@ -14,7 +15,7 @@ using IHost host = Host
     .ConfigureServices((hostContext, services) =>
     {
         services.AddSingleton(apiConfiguration);
-        services.UseOpenLibraryApi();
+        services.UseOpenLibraryApi(apiConfiguration);
     })
     .Build();
 
@@ -23,4 +24,5 @@ var searchTerm = Console.ReadLine();
 ArgumentException.ThrowIfNullOrEmpty(searchTerm, nameof(searchTerm));
 
 ISearchService searchService = host.Services.GetService<ISearchService>() ?? throw new NullReferenceException("ISearch Service not registered correctly.");
-await searchService.Search(searchTerm);
+var results = searchService.GeneralSearch(searchTerm);
+Console.WriteLine($"Search results for {searchTerm}: {results}");

@@ -1,4 +1,8 @@
+using OpenLibraryApi.Models;
+
+namespace OpenLibraryApi.API;
+
 public interface ISearchService
 {
-    Task Search(string searchTerm);
+    Task<SearchResponse> GeneralSearch(string searchTerm);
 }
