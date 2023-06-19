@@ -2,12 +2,12 @@ namespace OpenLibraryApi.Configuration;
 
 public class ApiConfiguration
 {
-    public string SearchApi { get; set; }
+    public string ApiUrl { get; set; }
 
-    public ApiConfiguration(string? searchApi)
+    public ApiConfiguration(string? apiUrl)
     {
-        ArgumentException.ThrowIfNullOrEmpty(searchApi, nameof(searchApi));
+        ArgumentException.ThrowIfNullOrEmpty(apiUrl, nameof(apiUrl));
         
-        this.SearchApi = searchApi;
+        this.ApiUrl = apiUrl;
     }
 }

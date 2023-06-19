@@ -9,7 +9,7 @@ public static class StartupExtensions
     {
         services.AddHttpClient<ISearchService, SearchService>(
             client => {
-                client.BaseAddress = new Uri(configuration.SearchApi);
+                client.BaseAddress = new Uri(configuration.ApiUrl);
             }
         );
     }
